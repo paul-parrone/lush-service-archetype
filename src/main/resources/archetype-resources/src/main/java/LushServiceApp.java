@@ -14,8 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan( {
         "com.px3j.lush.core",
-        "com.px3j.lush.endpoint.http"//,
-//        "com.px3j.lush.app"
+        "com.px3j.lush.endpoint.http",
+        "${package}"
 })
 public class LushServiceApp {
     public static void main(String[] args) {

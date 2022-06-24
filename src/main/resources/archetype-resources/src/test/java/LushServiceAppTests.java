@@ -53,8 +53,6 @@ public class LushServiceAppTests {
         Passport passport = new Passport("paul", "", List.of(new SimpleGrantedAuthority("user")));
 
         final String encodedPassport = passport.encode();
-//        String asJson = new Gson().toJson(passport);
-//        final String encodedPassport = new String(Base64.getEncoder().encode( asJson.getBytes(StandardCharsets.UTF_8) ));
 
         webTestClient
                 .get()

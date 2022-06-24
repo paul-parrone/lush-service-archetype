@@ -1,4 +1,4 @@
-package ${package};
+package ${package}.lush.controller;
 
 import com.px3j.lush.core.exception.LushException;
 import com.px3j.lush.core.model.Advice;
