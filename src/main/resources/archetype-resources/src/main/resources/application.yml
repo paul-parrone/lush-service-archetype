@@ -1,0 +1,28 @@
+server:
+  port: 9010
+
+spring:
+  application:
+    name: ${artifactId}
+
+logging:
+  level:
+    lush.core.debug: DEBUG
+
+# Spring profile: developer is used to run a service on a developer's computer.  With this profile active, Lush
+# expects that consul is running (you can run it in a Docker container).
+---
+spring:
+  config:
+    activate:
+      on-profile: developer
+
+  cloud:
+    # Consul related properties
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: ${spring.application.name}:${random.value}
+        health-check-interval: 10s
+        health-check-path: /actuator/health

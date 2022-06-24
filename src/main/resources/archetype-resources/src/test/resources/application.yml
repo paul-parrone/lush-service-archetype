@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: ${artifactId}-tests
+
+logging:
+  level:
+    root: INFO
+    com.px3j.lush: DEBUG
+
+lush:
+  security:
+    protected-paths: /lush/app/**
+#    public-paths: /actuator/**, /health/**
+
+# Spring profile: developer is used to run a service on a developer's computer.  With this profile active, Lush
+# expects that consul is running (you can run it in a Docker container).
+---
+spring:
+  config:
+    activate:
+      on-profile: developer
+
+  cloud:
+    # Consul related properties
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: ${spring.application.name}:${random.value}
+        health-check-interval: 10s
+        health-check-path: /actuator/health

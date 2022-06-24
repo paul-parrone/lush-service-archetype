@@ -1,0 +1,3 @@
+#!/bin/bash
+
+mvn archetype:generate -DarchetypeGroupId=com.px3j -DarchetypeArtifactId=lush-service -DarchetypeVersion=2022.6.0 -DgroupId=com.poc -DartifactId=my-lush-service
