@@ -56,7 +56,7 @@ public class LushServiceAppTests {
 
         webTestClient
                 .get()
-                .uri("/lush/app/ping" )
+                .uri("/lush/app/example/ping" )
                 .accept(MediaType.APPLICATION_JSON)
                 .headers( httpHeaders -> httpHeaders.put(
                         WHO_HEADER_NAME,
@@ -74,7 +74,7 @@ public class LushServiceAppTests {
 
         webTestClient
                 .get()
-                .uri("/lush/app/sayHi" )
+                .uri("/lush/app/example/sayHi" )
                 .accept(MediaType.APPLICATION_JSON)
                 .headers( httpHeaders -> httpHeaders.put(
                         WHO_HEADER_NAME,
@@ -93,7 +93,7 @@ public class LushServiceAppTests {
 
         FluxExchangeResult<Map> resultFlux = webTestClient
                 .get()
-                .uri("/lush/app/uae")
+                .uri("/lush/app/example/uae")
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> httpHeaders.put(
                         WHO_HEADER_NAME,
@@ -134,7 +134,7 @@ public class LushServiceAppTests {
 
         FluxExchangeResult<String> resultFlux = webTestClient
                 .get()
-                .uri("/lush/app/withAdvice")
+                .uri("/lush/app/example/withAdvice")
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> httpHeaders.put(
                         WHO_HEADER_NAME,

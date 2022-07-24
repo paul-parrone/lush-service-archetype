@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.px3j</groupId>
         <artifactId>lush-core-starter</artifactId>
-        <version>2022.6.0</version>
+        <version>2022.7.0-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
