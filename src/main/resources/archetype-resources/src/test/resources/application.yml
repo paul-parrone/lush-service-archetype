@@ -9,7 +9,7 @@ logging:
 
 lush:
   security:
-    protected-paths: /lush/app/**
+    protected-paths: /lush/example/**
 #    public-paths: /actuator/**, /health/**
 
 # Spring profile: developer is used to run a service on a developer's computer.  With this profile active, Lush
