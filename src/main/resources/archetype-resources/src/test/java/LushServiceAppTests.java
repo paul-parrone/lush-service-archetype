@@ -44,7 +44,7 @@ public class LushServiceAppTests {
     private final Tracer tracer;
 
     @Autowired
-    public LushExampleServiceTest(TicketUtil ticketUtil, ExampleSender exampleSender, Tracer tracer) {
+    public LushServiceAppTests(TicketUtil ticketUtil, ExampleSender exampleSender, Tracer tracer) {
         this.ticketUtil = ticketUtil;
         this.exampleSender = exampleSender;
         this.tracer = tracer;
