@@ -39,14 +39,11 @@ public class LushServiceAppTests {
     private WebTestClient webTestClient;
     private final TicketUtil ticketUtil;
 
-    private final ExampleSender exampleSender;
-
     private final Tracer tracer;
 
     @Autowired
-    public LushServiceAppTests(TicketUtil ticketUtil, ExampleSender exampleSender, Tracer tracer) {
+    public LushServiceAppTests(TicketUtil ticketUtil, Tracer tracer) {
         this.ticketUtil = ticketUtil;
-        this.exampleSender = exampleSender;
         this.tracer = tracer;
     }
 
@@ -220,24 +217,6 @@ public class LushServiceAppTests {
 
         log.info( "END: testXray" );
     }
-
-/*
-    @Test
-    void testJmsSend() {
-        log.info( "START: testJmsSend" );
-
-        final Span span = tracer.nextSpan();
-        final LushTicket ticket = new LushTicket("paul", "", List.of(new SimpleGrantedAuthority("user")));
-
-        try(Tracer.SpanInScope spanInScope = tracer.withSpan(span)) {
-            log.info( "About to send a JMS message" );
-            exampleSender.send("jms.message.endpoint", ticket, "first message" );
-            exampleSender.send("jms.message.endpoint", ticket, "second message" );
-        }
-
-        log.info( "END: testJmsSend" );
-    }
-*/
 
     @Test
     public void testWithAdviceThreaded() throws Exception {
