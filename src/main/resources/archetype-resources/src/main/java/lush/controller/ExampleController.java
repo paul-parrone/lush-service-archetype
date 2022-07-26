@@ -25,7 +25,7 @@ import java.util.Map;
 @RequestMapping("/lush/example")
 public class ExampleController {
     /**
-     * Example controller emdpoint that returns a String (wrapped by a Mono) as we are using Spring WebFlux.
+     * Example controller endpoint that returns a String (wrapped by a Mono) as we are using Spring WebFlux.
      *
      * A few things to note:
      * <ul>
@@ -36,11 +36,11 @@ public class ExampleController {
      * @return A Mono wrapping a hard-coded String
      */
     @LushControllerMethod
-    @RequestMapping("ping")
+    @GetMapping("ping")
     @PreAuthorize("isAuthenticated()")
-    public Mono<String> ping() {
+    public Mono<AnyModel> ping() {
         log.info( "ping() has been called" );
-        return Mono.just( "Powered By Lush" );
+        return Mono.just( AnyModel.from("message","Powered By Lush") );
     }
 
     /**
@@ -51,11 +51,11 @@ public class ExampleController {
      * @return A Mono with a String containing the username from the LushTicket
      */
     @LushControllerMethod
-    @RequestMapping("pingUser")
+    @GetMapping("pingUser")
     @PreAuthorize("isAuthenticated()")
-    public Mono<String> pingUser( LushTicket ticket) {
+    public Mono<AnyModel> pingUser( @Parameter(hidden = true) LushTicket ticket) {
         log.info( ticket.toString() );
-        return Mono.just( String.format("Powered By Lush - hi: %s", ticket.getUsername()) );
+        return Mono.just( AnyModel.from("message", String.format("Powered By Lush - hi: %s", ticket.getUsername())) );
     }
 
     /**
@@ -64,7 +64,7 @@ public class ExampleController {
      * @return A Flux that publishes a list of integers.
      */
     @LushControllerMethod
-    @RequestMapping("fluxOfInts")
+    @GetMapping("fluxOfInts")
     @PreAuthorize("isAuthenticated()")
     public Flux<Integer> fluxOfInts() {
         return Flux.fromIterable(List.of(1,2,3,4,5,6,7,8,9,10));
@@ -76,9 +76,9 @@ public class ExampleController {
      * @return A Flux that publishes a list of integers.
      */
     @LushControllerMethod
-    @RequestMapping("fluxOfIntsWithAdvice")
+    @GetMapping("fluxOfIntsWithAdvice")
     @PreAuthorize("isAuthenticated()")
-    public Flux<Integer> fluxOfIntsWithAdvice( LushTicket ticket, LushContext lushContext ) {
+    public Flux<Integer> fluxOfIntsWithAdvice( @Parameter(hidden = true) LushTicket ticket, @Parameter(hidden = true) LushContext lushContext ) {
         //
         // Advice automatically injected by Lush - you can modify it, it will be returned to the caller
         //
@@ -110,14 +110,14 @@ public class ExampleController {
      *
      * @return A String containing a message to the caller.
      */
-    @RequestMapping("uaeNoLush")
+    @GetMapping("uaeNoLush")
     @PreAuthorize("isAuthenticated()")
-    public Mono<String> uaeNoLush( LushTicket ticket) {
+    public Mono<AnyModel> uaeNoLush( @Parameter(hidden = true) LushTicket ticket) {
         // Illustration calling a method that may throw an exception, developers don't need to concern themselves with
         // these as Lush will handle it appropriately.
         methodThatThrowsUnexpectedException();
 
-        return Mono.just( String.format( "%s says hi!", ticket.getUsername()) );
+        return Mono.just( AnyModel.from( "message", String.format( "%s says hi!", ticket.getUsername())) );
     }
 
     /**
@@ -127,20 +127,20 @@ public class ExampleController {
      * @return A String containing a message to the caller.
      */
     @LushControllerMethod
-    @RequestMapping("uae")
+    @GetMapping("uae")
     @PreAuthorize("isAuthenticated()")
-    public Mono<String> uae( LushTicket ticket) {
+    public Mono<AnyModel> uae( @Parameter(hidden = true) LushTicket ticket) {
         // Illustration calling a method that may throw an exception, developers don't need to concern themselves with
         // these as Lush will handle it appropriately.
         methodThatThrowsUnexpectedException();
 
-        return Mono.just( String.format( "%s says hi!", ticket.getUsername()) );
+        return Mono.just( AnyModel.from("message", String.format( "%s says hi!", ticket.getUsername())) );
     }
 
     @LushControllerMethod
-    @RequestMapping("xray")
+    @GetMapping("xray")
     @PreAuthorize("isAuthenticated()")
-    public Mono<String> xray(LushTicket ticket, LushContext context ) {
+    public Mono<AnyModel> xray(@Parameter(hidden = true) LushTicket ticket, @Parameter(hidden = true) LushContext context ) {
         LushAdvice advice = context.getAdvice();
 
         log.info( "Injected ticket: {}", ticket.toString() );
@@ -156,7 +156,7 @@ public class ExampleController {
         advice.addWarning( new LushAdvice.LushWarning(1, Map.of( "collision", "field1,field2")));
         advice.addWarning( new LushAdvice.LushWarning(1, Map.of( "count", 100)));
 
-        return Mono.just( "LushAdvice Attached" );
+        return Mono.just( AnyModel.from("message", "LushAdvice Attached") );
     }
 
     private void methodThatThrowsUnexpectedException() {
