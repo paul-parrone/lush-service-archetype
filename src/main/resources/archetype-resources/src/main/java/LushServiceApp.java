@@ -1,6 +1,8 @@
 package ${package};
 
+import io.swagger.v3.oas.models.parameters.Parameter;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,4 +23,16 @@ public class LushServiceApp {
     public static void main(String[] args) {
         SpringApplication.run(LushServiceApp.class, args);
     }
+
+    @Bean
+    public OperationCustomizer customize() {
+        return (operation, handlerMethod) -> operation.addParametersItem(
+                new Parameter()
+                        .in("header")
+                        .required(true)
+                        .description("Lush Ticket as JSON")
+                        .name("x-lush-who")
+        );
+    }
+
 }
