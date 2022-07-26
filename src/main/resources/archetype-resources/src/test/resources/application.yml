@@ -7,10 +7,17 @@ logging:
     root: INFO
     com.px3j.lush: DEBUG
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # openapi, swagger-ui
+
+
 lush:
   security:
     protected-paths: /lush/example/**
-#    public-paths: /actuator/**, /health/**
+    public-paths: /actuator/**, /health/**, /swagger-ui/**, /swagger-resources/**, /v3/api-docs/**, /v3/api-docs.yaml, /swagger-ui.html, /webjars-swagger-ui, /webjars/**
 
 # Spring profile: developer is used to run a service on a developer's computer.  With this profile active, Lush
 # expects that consul is running (you can run it in a Docker container).

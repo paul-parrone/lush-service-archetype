@@ -1,4 +1,4 @@
-package com.px3j.lush.core.config;
+package ${package}.lush.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
