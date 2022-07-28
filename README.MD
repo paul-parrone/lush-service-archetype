@@ -5,6 +5,3 @@ This is the project containing the Maven archetype for generating Lush based ser
 
 [Getting Started](../lush-core/getting-started.md) guide.  This guide will take you through generating your first service and shows the technical details of what Lush can do  for you.  
 
-#### Maven build profiles
-developer
-enables consul
