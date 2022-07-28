@@ -1,12 +1,15 @@
 package ${package}.lush.controller;
 
 import com.px3j.lush.core.exception.LushException;
+import com.px3j.lush.core.model.AnyModel;
 import com.px3j.lush.core.model.LushAdvice;
 import com.px3j.lush.core.model.LushContext;
 import com.px3j.lush.core.ticket.LushTicket;
 import com.px3j.lush.endpoint.http.LushControllerMethod;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;

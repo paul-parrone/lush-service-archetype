@@ -2,6 +2,7 @@ package ${package};
 
 import io.swagger.v3.oas.models.parameters.Parameter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

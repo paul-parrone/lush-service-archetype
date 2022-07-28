@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 import static com.px3j.lush.endpoint.http.Constants.WHO_HEADER_NAME;
 
 @Slf4j
-@ActiveProfiles(profiles = {"developer"})
+@ActiveProfiles(profiles = {"developer", "clear-ticket"})
 @SpringBootTest( classes={LushServiceApp.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LushServiceAppTests {
