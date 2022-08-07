@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import ${package}.lush.model.Cat;
+
 import java.util.List;
 import java.util.Map;
 
@@ -64,24 +66,31 @@ public class ExampleController {
     /**
      * This endpoint illustrates how you can use a Flux to return a collection of data back to the caller.
      *
-     * @return A Flux that publishes a list of integers.
+     * @return A Flux that publishes a list of Cats.
      */
     @LushControllerMethod
-    @GetMapping("fluxOfInts")
+    @GetMapping("fluxOfCats")
     @PreAuthorize("isAuthenticated()")
-    public Flux<Integer> fluxOfInts() {
-        return Flux.fromIterable(List.of(1,2,3,4,5,6,7,8,9,10));
+    public Flux<Cat> fluxOfCats() {
+        return Flux.fromIterable(
+                List.of(
+                        new Cat("Gumball", "Tonkinese"),
+                        new Cat("Sneeb", "Tonkinese"),
+                        new Cat("Hobbes", "Domestic")
+
+                )
+        );
     }
 
     /**
      * This endpoint illustrates how you can use a Flux to return a collection of data back to the caller.
      *
-     * @return A Flux that publishes a list of integers.
+     * @return A Flux that publishes a list of Cats.
      */
     @LushControllerMethod
-    @GetMapping("fluxOfIntsWithAdvice")
+    @GetMapping("fluxOfCatsWithAdvice")
     @PreAuthorize("isAuthenticated()")
-    public Flux<Integer> fluxOfIntsWithAdvice( @Parameter(hidden = true) LushTicket ticket, @Parameter(hidden = true) LushContext lushContext ) {
+    public Flux<Cat> fluxOfCatsWithAdvice( @Parameter(hidden = true) LushTicket ticket, @Parameter(hidden = true) LushContext lushContext ) {
         //
         // Advice automatically injected by Lush - you can modify it, it will be returned to the caller
         //
@@ -103,7 +112,13 @@ public class ExampleController {
         advice.addWarning( new LushAdvice.LushWarning(600, Map.of("delayedData", true)));
 
         // And return data...
-        return Flux.fromIterable(List.of(1,2,3,4,5,6,7,8,9,10));
+        return Flux.fromIterable(
+                List.of(
+                        new Cat("Gumball", "Tonkinese"),
+                        new Cat("Sneeb", "Tonkinese"),
+                        new Cat("Hobbes", "Domestic")
+
+                ));
     }
 
 

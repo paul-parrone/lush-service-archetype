@@ -31,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 
 import static com.px3j.lush.endpoint.http.Constants.WHO_HEADER_NAME;
 
+import ${package}.lush.model.Cat;
+
 @Slf4j
 @ActiveProfiles(profiles = {"developer", "clear-ticket"})
 @SpringBootTest( classes={LushServiceApp.class})
@@ -107,33 +109,33 @@ public class LushServiceAppTests {
     }
 
     @Test
-    public void testFluxOfInts() {
-        log.info( "START: testFluxOfInts" );
+    public void testFluxOfCats() {
+        log.info( "START: testFluxOfCats" );
 
         LushTicket ticket = new LushTicket("paul", "", List.of(new SimpleGrantedAuthority("user")));
         final String encodedTicket = ticketUtil.encrypt(ticket);
 
         webTestClient
                 .get()
-                .uri("/lush/example/fluxOfInts" )
+                .uri("/lush/example/fluxOfCats" )
                 .accept(MediaType.APPLICATION_JSON)
                 .headers( httpHeaders -> httpHeaders.put(
                         WHO_HEADER_NAME,
                         List.of(encodedTicket)
                 ))
                 .exchange()
-                .expectBodyList(Integer.class)
+                .expectBodyList(Cat.class)
                 .value( l -> {
-                    l.forEach( i -> log.info( ""+i ) );
+                    l.forEach( i -> log.info( i.toString() ) );
                 })
                 .returnResult();
 
-        log.info( "END: testFluxOfInts" );
+        log.info( "END: testFluxOfCat" );
     }
 
     @Test
-    public void testFluxOfIntsWithAdvice() {
-        testFluxOfIntsWithAdviceImpl("tester");
+    public void testFluxOfCatsWithAdvice() {
+        testFluxOfCatsWithAdviceImpl("tester");
     }
 
     @Test
@@ -225,7 +227,7 @@ public class LushServiceAppTests {
 
         for( int i=0; i<numThreads; i++ ) {
             executor.submit( () -> {
-                testFluxOfIntsWithAdviceImpl(UUID.randomUUID().toString());
+                testFluxOfCatsWithAdviceImpl(UUID.randomUUID().toString());
             });
         }
 
@@ -233,15 +235,15 @@ public class LushServiceAppTests {
         executor.awaitTermination( 10, TimeUnit.SECONDS );
     }
 
-    private void testFluxOfIntsWithAdviceImpl( String username ) {
+    private void testFluxOfCatsWithAdviceImpl( String username ) {
         username = username == null ? "paul" : username;
 
         LushTicket ticket = new LushTicket(username, "", List.of(new SimpleGrantedAuthority("user")));
         final String encodedTicket = ticketUtil.encrypt(ticket);
 
-        Flux<Integer> data =webTestClient
+        Flux<Cat> data =webTestClient
                 .get()
-                .uri("/lush/example/fluxOfIntsWithAdvice")
+                .uri("/lush/example/fluxOfCatsWithAdvice")
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> httpHeaders.put(
                         WHO_HEADER_NAME,
@@ -249,10 +251,10 @@ public class LushServiceAppTests {
                 ))
                 .exchange()
                 .expectHeader().value("x-lush-advice", this::displayAdvice)
-                .returnResult(Integer.class)
+                .returnResult(Cat.class)
                 .getResponseBody();
 
-        data.subscribe( s -> log.info( "{}", s ));
+        data.subscribe( s -> log.info( "{}", s.toString() ));
     }
 
     private void displayAdvice(HttpHeaders headers) {
