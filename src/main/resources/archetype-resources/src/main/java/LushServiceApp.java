@@ -7,6 +7,7 @@ import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import reactivefeign.spring.config.EnableReactiveFeignClients;
 
 /**
  * This is a simple Spring Boot application showing how to use Lush in your application.
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @Slf4j
 @SpringBootApplication
+@EnableReactiveFeignClients
 @ComponentScan( {
         "com.px3j.lush.core",
         "com.px3j.lush.endpoint.http",
@@ -32,7 +34,7 @@ public class LushServiceApp {
                         .in("header")
                         .required(true)
                         .description("Lush Ticket as JSON")
-                        .name("x-lush-who")
+                        .name("x-lush-ticket")
         );
     }
 

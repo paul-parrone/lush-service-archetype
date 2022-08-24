@@ -6,9 +6,12 @@ import com.px3j.lush.core.model.AnyModel;
 import com.px3j.lush.core.model.LushAdvice;
 import com.px3j.lush.core.model.LushContext;
 import com.px3j.lush.core.ticket.LushTicket;
+import com.px3j.lush.core.ticket.TicketUtil;
+import com.px3j.lush.core.util.CryptoHelper;
 import com.px3j.lush.endpoint.http.LushControllerMethod;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +20,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import ${package}.lush.model.Cat;
+import ${package}.lush.feign.ExampleServiceApi;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +39,45 @@ import java.util.Map;
 @RestController
 @RequestMapping("/lush/example")
 public class ExampleController {
+    private TicketUtil ticketUtil;
+    private ExampleServiceApi exampleServiceApi;
+
+    @Autowired
+    public ExampleController(TicketUtil ticketUtil, ExampleServiceApi exampleServiceApi) {
+        this.ticketUtil = ticketUtil;
+        this.exampleServiceApi = exampleServiceApi;
+    }
+
+    /**
+     * Example controller endpoint that will return a new set of crypto keys usable to encrypt/decrypt Lust Ticket(s).
+     *
+     * @return A map of an access key and a secret key
+     */
+    @LushControllerMethod
+    @GetMapping("crypto-gen")
+    @PreAuthorize("isAuthenticated()")
+    public Mono<AnyModel> cryptoGen() {
+        try {
+            log.info( "cryptoGen() has been called" );
+
+            SecretKey secretKey = CryptoHelper.generateKey(256);
+            IvParameterSpec ivParameterSpec = CryptoHelper.generateIv();
+
+            String encodedKey = Base64.getEncoder().encodeToString(secretKey.getEncoded());
+            String encodedIv  = Base64.getEncoder().encodeToString(ivParameterSpec.getIV());
+
+            return Mono.just(
+                    AnyModel.from(
+                            "lush.crypto.secret-key", encodedKey,
+                            "lush.crypto.access-key", encodedIv
+                    )
+            );
+        }
+        catch (NoSuchAlgorithmException e) {
+            throw new LushException( e );
+        }
+    }
+
     /**
      * Example controller endpoint that returns a String (wrapped by a Mono) as we are using Spring WebFlux.
      *
@@ -63,6 +110,22 @@ public class ExampleController {
     public Mono<AnyModel> pingUser( @Parameter(hidden = true) LushTicket ticket) {
         log.info( ticket.toString() );
         return Mono.just( AnyModel.from("message", String.format("Powered By Lush - hi: %s", ticket.getUsername())) );
+    }
+
+    /**
+     * This endpoint illustrates how you can use the included open feign library to call another service.  The traceId
+     * is carried across to the calling service.  Also, by providing the Lush Ticket, the log statements in the called
+     * service will contain the username.
+     *
+     * @param ticket The ticket representing the caller of this endpoint.
+     * @return An instance of AnyModel as returned by the remote service.
+     */
+    @LushControllerMethod
+    @GetMapping("pingRemote")
+    @PreAuthorize("isAuthenticated()")
+    public Mono<AnyModel> pingRemote(LushTicket ticket) {
+        log.debug( "calling remote" );
+        return exampleServiceApi.ping(ticketUtil.encrypt(ticket));
     }
 
     /**

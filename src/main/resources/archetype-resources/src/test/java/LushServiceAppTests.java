@@ -3,8 +3,6 @@ package ${package};
 import com.google.gson.Gson;
 import com.px3j.lush.core.model.LushAdvice;
 import com.px3j.lush.core.ticket.LushTicket;
-import com.px3j.lush.example.service.LushExampleServiceApp;
-import com.px3j.lush.example.service.endpoint.jms.ExampleSender;
 import com.px3j.lush.core.ticket.TicketUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -29,7 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static com.px3j.lush.endpoint.http.Constants.WHO_HEADER_NAME;
+import static com.px3j.lush.endpoint.http.Constants.TICKET_HEADER_NAME;
 
 import ${package}.lush.model.Cat;
 
@@ -74,7 +72,7 @@ public class LushServiceAppTests {
                 .uri("/lush/example/ping" )
                 .accept(MediaType.APPLICATION_JSON)
                 .headers( httpHeaders -> httpHeaders.put(
-                        WHO_HEADER_NAME,
+                        TICKET_HEADER_NAME,
                         List.of(encodedTicket)
                 ))
                 .exchange()
@@ -97,7 +95,7 @@ public class LushServiceAppTests {
                 .uri("/lush/example/pingUser" )
                 .accept(MediaType.APPLICATION_JSON)
                 .headers( httpHeaders -> httpHeaders.put(
-                        WHO_HEADER_NAME,
+                        TICKET_HEADER_NAME,
                         List.of(encodedTicket)
                 ))
                 .exchange()
@@ -120,7 +118,7 @@ public class LushServiceAppTests {
                 .uri("/lush/example/fluxOfCats" )
                 .accept(MediaType.APPLICATION_JSON)
                 .headers( httpHeaders -> httpHeaders.put(
-                        WHO_HEADER_NAME,
+                        TICKET_HEADER_NAME,
                         List.of(encodedTicket)
                 ))
                 .exchange()
@@ -150,7 +148,7 @@ public class LushServiceAppTests {
                 .uri("/lush/example/uae")
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> httpHeaders.put(
-                        WHO_HEADER_NAME,
+                        TICKET_HEADER_NAME,
                         List.of(encodedTicket)
                 ))
                 .exchange()
@@ -178,7 +176,7 @@ public class LushServiceAppTests {
                 .uri("/lush/example/uaeNoLush")
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> httpHeaders.put(
-                        WHO_HEADER_NAME,
+                        TICKET_HEADER_NAME,
                         List.of(encodedTicket)
                 ))
                 .exchange()
@@ -207,7 +205,7 @@ public class LushServiceAppTests {
                 .uri("/lush/example/xray")
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> httpHeaders.put(
-                        WHO_HEADER_NAME,
+                        TICKET_HEADER_NAME,
                         List.of(encodedTicket)
                 ))
                 .exchange()
@@ -246,7 +244,7 @@ public class LushServiceAppTests {
                 .uri("/lush/example/fluxOfCatsWithAdvice")
                 .accept(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders -> httpHeaders.put(
-                        WHO_HEADER_NAME,
+                        TICKET_HEADER_NAME,
                         List.of(encodedTicket)
                 ))
                 .exchange()
